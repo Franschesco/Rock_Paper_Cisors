@@ -1,0 +1,191 @@
+#!/usr/bin/env python3
+import sys
+import math
+import random
+
+NBR_ROUND = 10000
+
+ROCK = 0
+PAPER = 1
+SCISSORS = 2
+
+NUMBER_OF_STRATEGY = 9
+
+PLAYER1 = 0
+EGALITY = 0
+PLAYER2 = 0
+
+WINNER = -1
+
+###############################################################
+
+def only_rock(i, last, last_last, argument, my_last, my_last_last):
+    return(ROCK)
+
+def only_paper(i, last, last_last, argument, my_last, my_last_last):
+    return(PAPER)
+
+def only_scissors(i, last, last_last, argument, my_last, my_last_last):
+    return(SCISSORS)
+
+def rock_scissors(i, last, last_last, argument, my_last, my_last_last):
+    random_number = random.randint(0, 1)
+    if (random_number == 0):
+        return(ROCK)
+    if (random_number == 1):
+        return(SCISSORS)
+
+def rock_paper(i, last, last_last, argument, my_last, my_last_last):
+    random_number = random.randint(0, 1)
+    if (random_number == 0):
+        return(ROCK)
+    if (random_number == 1):
+        return(PAPER)
+
+def paper_scissors(i, last, last_last, argument, my_last, my_last_last):
+    random_number = random.randint(0, 1)
+    if (random_number == 0):
+        return(PAPER)
+    if (random_number == 1):
+        return(SCISSORS)
+
+def rock_paper_scissors(i, last, last_last, argument, my_last, my_last_last):
+    return(random.randint(0, 2))
+
+def answer_to_the_last(i, last, last_last, argument, my_last, my_last_last):
+    if (last == -1):
+        return(random.randint(0, 2))
+    if (last == ROCK):
+        return(PAPER)
+    if (last == PAPER):
+        return(SCISSORS)
+    if (last == SCISSORS):
+        return(ROCK)
+
+def psycologie_f(i, last, last_last, argument, my_last, my_last_last):
+    if (i == 0):
+        if (random.randint(1, 6) == 1):
+            return (SCISSORS)
+        else:
+            return (PAPER)
+    if (last == last_last):
+        if (last == ROCK):
+            return (SCISSORS)
+        if (last == PAPER):
+            return (ROCK)
+        if (last == SCISSORS):
+            return (PAPER)
+    if (my_last == my_last_last and ((int(argument[1]) == 8 and WINNER == 2) or (int(argument[2]) == 8 and WINNER == 1))):
+        return (my_last)
+    if (WINNER == 0):
+        if (last == ROCK):
+            return (SCISSORS)
+        if (last == PAPER):
+            return (ROCK)
+        if (last == SCISSORS):
+            return (PAPER)
+    if (int(argument[1]) == 8 and WINNER == 1 or int(argument[2]) == 8 and WINNER == 2):
+        if (last == ROCK):
+            return (PAPER)
+        if (last == PAPER):
+            return (SCISSORS)
+        if (last == SCISSORS):
+            return (ROCK)
+    else:
+        if (last == ROCK):
+            return (SCISSORS)
+        if (last == PAPER):
+            return (ROCK)
+        if (last == SCISSORS):
+            return (PAPER)
+
+tableau_fonctions = [only_rock, only_paper, only_scissors, rock_scissors, rock_paper, paper_scissors, rock_paper_scissors, answer_to_the_last, psycologie_f]
+
+####################################################################
+
+def error_gestion(argument):
+    global NUMBER_OF_STRATEGY
+    if (len(argument) < 2):
+        print("do ./algo -h, bad number of argument")
+        return (84)
+    if (str(argument[1]) == "-h"):
+        print("")
+        print("Rock, Papers, Scissors simulation")
+        print("")
+        print("USAGE: ./algo [number_of_strategy_player_1] [number_of_strategy_player_2]")
+        print("")
+        print("0 : Do only rock")
+        print("1 : Do only paper")
+        print("2 : Do only scissors")
+        print("3 : 50/50 rock, scissors")
+        print("4 : 50/50 rock, paper")
+        print("5 : 50/50 paper, scissors")
+        print("6 : 33/33/33 rock, paper, scissors")
+        print("7 : does what should have been done once before")
+        print("8 : special technique for beat human")
+        return (84)
+    if (len(argument) != 3):
+        print("do ./algo -h, bad number of argument")
+        return (84)
+    if (argument[1].isdigit() == False or argument[2].isdigit() == False):
+        print("Put the number of the strategy do ./algo -h for help")
+        return (84)
+    if (int(argument[1]) > NUMBER_OF_STRATEGY - 1 or int(argument[2]) > NUMBER_OF_STRATEGY - 1):
+        print("number to much high")
+        return (84)
+
+def analyse_victory(value1, value2):
+    global EGALITY, PLAYER1, PLAYER2, WINNER
+    if (value1 == ROCK and value2 == ROCK or value1 == PAPER and value2 == PAPER or value1 == SCISSORS and value2 == SCISSORS):
+        EGALITY = EGALITY + 1
+        WINNER = 0
+    if (value1 == PAPER and value2 == ROCK or value1 == SCISSORS and value2 == PAPER or value1 == ROCK and value2 == SCISSORS):
+        PLAYER1 = PLAYER1 + 1
+        WINNER = 1
+    if (value1 == ROCK and value2 == PAPER or value1 == PAPER and value2 == SCISSORS or value1 == SCISSORS and value2 == ROCK):
+        PLAYER2 = PLAYER2 + 1
+        WINNER = 2
+
+def print_result_f(argument):
+    global EGALITY, PLAYER1, PLAYER2
+    print("------------------------------------------")
+    print("|         |     player1   |    player2   |")
+    print("------------------------------------------")
+    print(f"|Strategy |       {argument[1]}       |       {argument[2]}      |")
+    print("------------------------------------------")
+    print(f"| Point   |       {PLAYER1}     |       {PLAYER2}\t |")
+    print("------------------------------------------")
+    if (PLAYER1 == PLAYER2):
+        print("| Winner  |           egality            |")
+    if (PLAYER1 > PLAYER2):
+        print("| Winner  |           player1            |")
+    if (PLAYER1 < PLAYER2):
+        print("| Winner  |           player2            |")
+    print("------------------------------------------")
+    print(f"| Number_of_egality  |        {EGALITY} \t |")
+    print("------------------------------------------")
+
+def main():
+    argument = sys.argv
+    if (error_gestion(argument) == 84):
+        return (84)
+    argument[1] = int(argument[1])
+    argument[2] = int(argument[2])
+    i = 0
+    last_value1 = -1
+    last_value2 = -1
+    last_last_value1 = -1
+    last_last_value2 = -1
+    while (i < NBR_ROUND):
+        value1 = tableau_fonctions[argument[1]](i, last_value2, last_last_value2, argument, last_value1, last_last_value1)
+        value2 = tableau_fonctions[argument[2]](i, last_value1, last_last_value1, argument, last_value2, last_last_value2)
+        last_last_value1 = last_value1
+        last_last_value2 = last_value2
+        last_value1 = value1
+        last_value2 = value2
+        analyse_victory(value1, value2)
+        i += 1
+    print_result_f(argument)
+
+if __name__ == "__main__":
+    main()

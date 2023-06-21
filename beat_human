@@ -1,0 +1,124 @@
+#!/usr/bin/env python3
+import sys
+import math
+import random
+
+ROCK = 1
+PAPER = 2
+SCISSORS = 3
+
+BOT = 0
+HUMAN = 0
+EGALITY = 0
+
+WINNER = -1
+
+###############################################################################
+
+def psycologie_f(i, last, last_last, argument, my_last, my_last_last):
+    global HUMAN, BOT, EGALITY, WINNER
+    if (i == 0):
+        print("$1$")
+        if (random.randint(1, 6) == 1):
+            return (SCISSORS)
+        else:
+            return (PAPER)
+    if (last == last_last):
+        print("$2$")
+        if (last == ROCK):
+            return (SCISSORS)
+        if (last == PAPER):
+            return (ROCK)
+        if (last == SCISSORS):
+            return (PAPER)
+    if (my_last == my_last_last and WINNER == 2):
+        print("$3$")
+        return (my_last)
+    if (WINNER == 0):
+        print("$4$")
+        if (last == ROCK):
+            return (SCISSORS)
+        if (last == PAPER):
+            return (ROCK)
+        if (last == SCISSORS):
+            return (PAPER)
+    if (WINNER == 2):
+        print("$5$")
+        if (last == ROCK):
+            return (SCISSORS)
+        if (last == PAPER):
+            return (ROCK)
+        if (last == SCISSORS):
+            return (PAPER)
+    else:
+        print("$6$")
+        if (last == ROCK):
+            return (PAPER)
+        if (last == PAPER):
+            return (SCISSORS)
+        if (last == SCISSORS):
+            return (ROCK)
+
+###############################################################################
+
+def error_gestion(argument):
+    if (len(argument) > 1):
+        return (84)
+
+def main():
+    argument = sys.argv
+    global HUMAN, BOT, EGALITY, WINNER
+    if (error_gestion(argument) == 84):
+        return (84)
+    result = "lala"
+    print(end="Write 1 for ROCK\nWrite 2 for PAPER\nWrite 3 for SCISSORS\nWrite STOP for stop\n\nWhat do you play ?: ")
+    i = 0
+    last = -1
+    last_last = -1
+    my_last = -1
+    my_last_last = -1
+    while (result != "STOP"):
+        result = input();
+        if (result != "STOP"):
+            if (result.isdigit() == False):
+                print(end="Write a valid answer pls!\nWhat do you play ?:")
+                continue
+        if (result != "STOP"):
+            result = int(result)
+            value = psycologie_f(i, last, last_last, argument, my_last, my_last_last)
+            my_last_last = my_last
+            my_last = value
+            last_last = last
+            last = result
+            print("")
+            if (value == ROCK):
+                print("bot play ROCK !\n")
+            if (value == PAPER):
+                print("bot play PAPER !\n")
+            if (value == SCISSORS):
+                print("bot play SCISSORS !\n")
+
+            if (result == ROCK and value == ROCK or result == PAPER and value == PAPER or result == SCISSORS and value == SCISSORS):
+                EGALITY = EGALITY + 1
+                WINNER = 0
+                print("EGALITY !!\n")
+            if (result == PAPER and value == ROCK or result == SCISSORS and value == PAPER or result == ROCK and value == SCISSORS):
+                HUMAN = HUMAN + 1
+                WINNER = 1
+                print("You Won !!\n")
+            if (result == ROCK and value == PAPER or result == PAPER and value == SCISSORS or result == SCISSORS and value == ROCK):
+                BOT = BOT + 1
+                WINNER = 2
+                print("Bot Won !!\n")
+            print(f"------------------------------------")
+            print(end= f"Score Bot {BOT} points, Human {HUMAN} points, Equality {EGALITY} points\n")
+            print(f"-------------------------------------")
+            print(end="Write 1 for ROCK\nWrite 2 for PAPER\nWrite 3 for SCISSORS\nWrite STOP for stop\n\nWhat do you play ?: ")
+        else:
+            print(f"------------------------------------")
+            print(end= f"Score Bot {BOT} points, Human {HUMAN} points, Equality {EGALITY} points\n")
+            print(f"------------------------------------")
+        i += 1
+
+if __name__ == "__main__":
+    main()
