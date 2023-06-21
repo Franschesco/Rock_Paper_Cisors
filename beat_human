@@ -18,13 +18,11 @@ WINNER = -1
 def psycologie_f(i, last, last_last, argument, my_last, my_last_last):
     global HUMAN, BOT, EGALITY, WINNER
     if (i == 0):
-        print("$1$")
         if (random.randint(1, 6) == 1):
             return (SCISSORS)
         else:
             return (PAPER)
     if (last == last_last):
-        print("$2$")
         if (last == ROCK):
             return (SCISSORS)
         if (last == PAPER):
@@ -32,10 +30,8 @@ def psycologie_f(i, last, last_last, argument, my_last, my_last_last):
         if (last == SCISSORS):
             return (PAPER)
     if (my_last == my_last_last and WINNER == 2):
-        print("$3$")
         return (my_last)
     if (WINNER == 0):
-        print("$4$")
         if (last == ROCK):
             return (SCISSORS)
         if (last == PAPER):
@@ -43,7 +39,6 @@ def psycologie_f(i, last, last_last, argument, my_last, my_last_last):
         if (last == SCISSORS):
             return (PAPER)
     if (WINNER == 2):
-        print("$5$")
         if (last == ROCK):
             return (SCISSORS)
         if (last == PAPER):
@@ -51,7 +46,6 @@ def psycologie_f(i, last, last_last, argument, my_last, my_last_last):
         if (last == SCISSORS):
             return (PAPER)
     else:
-        print("$6$")
         if (last == ROCK):
             return (PAPER)
         if (last == PAPER):
@@ -81,7 +75,10 @@ def main():
         result = input();
         if (result != "STOP"):
             if (result.isdigit() == False):
-                print(end="Write a valid answer pls!\nWhat do you play ?:")
+                print(end="Write a valid answer pls!\nWhat do you play ?: ")
+                continue
+            if (int(result) != 1 and int(result) != 2 and int(result) != 3):
+                print(end="Write a valid number pls!\nWhat do you play ?: ")
                 continue
         if (result != "STOP"):
             result = int(result)
